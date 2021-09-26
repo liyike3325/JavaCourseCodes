@@ -1,6 +1,6 @@
-#不同GC和堆内存的总结
+# 不同GC和堆内存的总结
 
-##串行GC
+## 串行GC
 -XX:+UseSerialGC
 串行GC对年轻代使用mark-copy（标记-复制）算法，对老年代使用mark-sweep-compact（标记-清除-整理）算法。
 两者都是单线程的垃圾收集器，不能进行并行处理，所以都会触发全线暂停（STW），停止所有的应用线程。
@@ -34,7 +34,7 @@ GC次数明显变少，GC时间基本是在十几毫秒至二十几毫秒，最�
 老年代基本上使用了30MB左右
 
 
-##并行GC
+## 并行GC
 -XX:+UseParallelGC
 -XX:+UseParallelOldGC
 -XX:+UseParallelGC -XX:+UseParallelOldGC
@@ -72,7 +72,7 @@ GC次数明显变少，GC时间基本是在十几毫秒至二十几毫秒，最�
 老年代基本上使用了30MB左右
 
 
-##CMS GC
+## CMS GC
 -XX:+UseConcMarkSweepGC
 对年轻代采用并行STW方式的mark-copy（标记-复制）算法，对老年代主要使用并发mark-sweep（标记-清除）算法。
 CMS GC的设计目标是避免在老年代垃圾收集时出现长时间的卡顿，主要通过两种手段来达成此目标：
@@ -111,7 +111,7 @@ GC次数没有变少，GC时间基本是在十几毫秒至二十几毫秒，最�
 老年代基本上使用了10MB左右
 
 
-##G1 GC
+## G1 GC
 -XX:+UseG1GC -XX:MaxGCPauseMillis=50
 G1的全称是Garbage-First，意为垃圾优先，哪一块的垃圾最多就优先清理它。
 G1 GC最主要的设计目标是：将STW停顿的时间和分布，变成可预期且可配置的。
@@ -147,13 +147,13 @@ GC时间基本是在十几毫秒，最长用时89毫秒
 内存变大以后，gc次数减少，但是gc的暂停时间变长
 
 
-##测试场景总结：
+## 测试场景总结：
 使用程序gateway-server-0.0.1-SNAPSHOT.jar
 使用压测 wrk -c400 -d30s http://localhost:8088/api/hello
 分别配置堆内存512MB、1GB、4GB三种进行测试
 测试了串行GC、并行GC、CMS GC、G1 GC
 
-##堆内存总结：
+## 堆内存总结：
 1、各GC下默认最大young区大小
 -串行GC、并行GC年轻代大概分配三分之一的内存，默认年轻代和老年代比例值为1:2
 -ParallelGC:1024M / 3 = 341.3M
