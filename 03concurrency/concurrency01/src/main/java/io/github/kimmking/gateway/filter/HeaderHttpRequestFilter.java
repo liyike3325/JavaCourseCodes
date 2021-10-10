@@ -24,6 +24,6 @@ public class HeaderHttpRequestFilter implements HttpRequestFilter {
             headers = new DefaultHttpHeaders();
         }
         headers.set("xjava", "liyike");
-        
+
     }
 }
