@@ -4,14 +4,13 @@ import java.util.concurrent.*;
 
 /**
  * 获取线程返回值方法3
- * 创建线程池，实现Callable接口，future.get()将阻塞，直至结果准备就绪
+ * 使用Future获得异步执行结果，调用阻塞方法get()
  */
 public class Return3Application {
 
     public static void main(String[] args) throws ExecutionException, InterruptedException {
         long start=System.currentTimeMillis();
 
-        // 获取子线程返回值：
         // 创建线程池，实现Callable接口，future.get()将阻塞，直至结果准备就绪
         Callable<Integer> task = new CountCallable();
         ExecutorService executorService = Executors.newCachedThreadPool();

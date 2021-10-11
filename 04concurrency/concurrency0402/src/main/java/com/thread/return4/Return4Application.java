@@ -1,7 +1,5 @@
 package com.thread.return4;
 
-import com.thread.return4.CountCallable;
-
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
