@@ -16,6 +16,9 @@ import java.util.List;
 @EnableConfigurationProperties(SchoolProperties.class)
 public class SchoolAutoConfiguration {
 
+    /**
+     * 注入属性配置类
+     */
     @Resource
     private SchoolProperties schoolProperties;
 
