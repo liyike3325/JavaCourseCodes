@@ -12,7 +12,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @Configuration
-@ConditionalOnClass(School.class)
+@ConditionalOnClass(SchoolService.class)
 @EnableConfigurationProperties(SchoolProperties.class)
 public class SchoolAutoConfiguration {
 
@@ -23,9 +23,9 @@ public class SchoolAutoConfiguration {
     private SchoolProperties schoolProperties;
 
     @Bean
-    @ConditionalOnMissingBean(School.class)
+    @ConditionalOnMissingBean(SchoolService.class)
     @ConditionalOnProperty(prefix = "school", value = "enabled", havingValue = "true")
-    public School school() {
+    public SchoolService schoolService() {
         Student student100 = new Student();
         student100.setId(schoolProperties.getStudent100Id());
         student100.setName(schoolProperties.getStudent100Name());
@@ -37,7 +37,7 @@ public class SchoolAutoConfiguration {
         List<Student> students = Arrays.asList(student100, student123);
         Klass klass = new Klass();
         klass.setStudents(students);
-        School school = new School(klass, student100);
-        return school;
+        SchoolService schoolService = new SchoolService(klass, student100);
+        return schoolService;
     }
 }

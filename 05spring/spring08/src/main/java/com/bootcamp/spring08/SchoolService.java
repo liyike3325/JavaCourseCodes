@@ -3,13 +3,13 @@ package com.bootcamp.spring08;
 import lombok.Data;
 
 @Data
-public class School implements ISchool {
+public class SchoolService implements ISchool {
 
     Klass class1;
 
     Student student100;
 
-    public School(Klass class1, Student student100) {
+    public SchoolService(Klass class1, Student student100) {
         this.class1 = class1;
         this.student100 = student100;
     }

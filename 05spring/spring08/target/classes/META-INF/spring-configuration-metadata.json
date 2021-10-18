@@ -1,0 +1,34 @@
+{
+  "groups": [
+    {
+      "name": "school",
+      "type": "com.bootcamp.spring08.SchoolProperties",
+      "sourceType": "com.bootcamp.spring08.SchoolProperties"
+    }
+  ],
+  "properties": [
+    {
+      "name": "school.student100-id",
+      "type": "java.lang.Integer",
+      "sourceType": "com.bootcamp.spring08.SchoolProperties",
+      "defaultValue": 0
+    },
+    {
+      "name": "school.student100-name",
+      "type": "java.lang.String",
+      "sourceType": "com.bootcamp.spring08.SchoolProperties"
+    },
+    {
+      "name": "school.student123-id",
+      "type": "java.lang.Integer",
+      "sourceType": "com.bootcamp.spring08.SchoolProperties",
+      "defaultValue": 0
+    },
+    {
+      "name": "school.student123-name",
+      "type": "java.lang.String",
+      "sourceType": "com.bootcamp.spring08.SchoolProperties"
+    }
+  ],
+  "hints": []
+}
