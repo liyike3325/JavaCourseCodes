@@ -2,8 +2,9 @@ package com.bootcamp.bank2.mapper;
 
 import com.bootcamp.bank2.entity.AccountInfo;
 import com.bootcamp.bank2.entity.AccountInfoExample;
-import java.util.List;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 public interface AccountInfoMapper {
     /**

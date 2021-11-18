@@ -2,8 +2,9 @@ package com.bootcamp.bank1.mapper;
 
 import com.bootcamp.bank1.entity.LocalTryLog;
 import com.bootcamp.bank1.entity.LocalTryLogExample;
-import java.util.List;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 public interface LocalTryLogMapper {
     /**

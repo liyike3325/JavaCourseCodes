@@ -17,4 +17,9 @@ public class Bank1Controller {
         accountInfoService.updateAccountBalance("1", amount);
         return true;
     }
+
+    @RequestMapping("/hello")
+    public String hello() {
+        return accountInfoService.hello();
+    }
 }
