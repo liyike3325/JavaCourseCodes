@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- 主机： 127.0.0.1
--- 生成日期： 2021-11-18 00:29:58
+-- 生成日期： 2021-11-21 14:31:58
 -- 服务器版本： 5.7.27
 -- PHP 版本： 7.3.9
 
@@ -19,7 +19,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- 数据库： `bank2`
+-- 数据库： `fbank2`
 --
 
 -- --------------------------------------------------------
@@ -46,6 +46,28 @@ INSERT INTO `account_info` (`id`, `account_name`, `account_no`, `account_passwor
 -- --------------------------------------------------------
 
 --
+-- 表的结构 `balance`
+--
+
+CREATE TABLE `balance` (
+  `id` int(11) NOT NULL,
+  `account_no` varchar(100) NOT NULL COMMENT '银行卡号',
+  `rmb` decimal(10,2) NOT NULL COMMENT '人民币',
+  `frozen_rmb` decimal(10,2) NOT NULL COMMENT '冻结人民币',
+  `dollar` decimal(10,2) NOT NULL COMMENT '美元',
+  `frozen_dollar` decimal(10,2) NOT NULL COMMENT '冻结美元'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='余额表';
+
+--
+-- 转存表中的数据 `balance`
+--
+
+INSERT INTO `balance` (`id`, `account_no`, `rmb`, `frozen_rmb`, `dollar`, `frozen_dollar`) VALUES
+(1, '2', '100.00', '0.00', '100.00', '0.00');
+
+-- --------------------------------------------------------
+
+--
 -- 表的结构 `local_cancel_log`
 --
 
@@ -64,17 +86,6 @@ CREATE TABLE `local_confirm_log` (
   `tx_no` varchar(64) NOT NULL COMMENT '事务id',
   `create_time` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- 转存表中的数据 `local_confirm_log`
---
-
-INSERT INTO `local_confirm_log` (`tx_no`, `create_time`) VALUES
-('1460957423293788160', '2021-11-17 13:06:08'),
-('1460957593196654592', '2021-11-17 13:06:48'),
-('1460966180843368448', '2021-11-17 13:40:56'),
-('1460971341961265152', '2021-11-17 14:01:26'),
-('1461128318097510400', '2021-11-18 00:25:13');
 
 -- --------------------------------------------------------
 
@@ -98,6 +109,12 @@ ALTER TABLE `account_info`
   ADD PRIMARY KEY (`id`) USING BTREE;
 
 --
+-- 表的索引 `balance`
+--
+ALTER TABLE `balance`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- 表的索引 `local_cancel_log`
 --
 ALTER TABLE `local_cancel_log`
@@ -118,6 +135,12 @@ ALTER TABLE `local_try_log`
 --
 ALTER TABLE `account_info`
   MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- 使用表AUTO_INCREMENT `balance`
+--
+ALTER TABLE `balance`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
