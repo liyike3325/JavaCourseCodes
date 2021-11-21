@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+
+    <context id="MySql" defaultModelType="flat">
+
+        <plugin type="org.mybatis.generator.plugins.SerializablePlugin" />
+
+        <jdbcConnection
+                driverClass="com.mysql.jdbc.Driver"
+                connectionURL="jdbc:mysql://127.0.0.1:3306/fbank2"
+                userId="root"
+                password="123456" />
+
+        <javaModelGenerator targetPackage="com.bootcamp.bank2.entity" targetProject="src/main/java"></javaModelGenerator>
+
+        <sqlMapGenerator targetPackage="mapper"  targetProject="src/main/resources"></sqlMapGenerator>
+
+        <javaClientGenerator targetPackage="com.bootcamp.bank2.mapper" targetProject="src/main/java" type="XMLMAPPER"></javaClientGenerator>
+
+        <table tableName="account_info">
+            <property name="modelOnly" value="false"/>
+        </table>
+        <table tableName="balance">
+            <property name="modelOnly" value="false"/>
+        </table>
+        <table tableName="local_cancel_log">
+            <property name="modelOnly" value="false"/>
+        </table>
+        <table tableName="local_confirm_log">
+            <property name="modelOnly" value="false"/>
+        </table>
+        <table tableName="local_try_log">
+            <property name="modelOnly" value="false"/>
+        </table>
+
+    </context>
+
+</generatorConfiguration>
