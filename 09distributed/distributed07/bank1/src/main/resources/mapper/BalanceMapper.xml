@@ -262,6 +262,11 @@
     set frozen_dollar = frozen_dollar + #{frozenDollar}
     where account_no = #{accountNo}
   </update>
+  <update id="addRmb" parameterType="map">
+    update balance
+    set rmb = rmb + #{rmb}
+    where account_no = #{accountNo}
+  </update>
   <select id="getBalanceByAccountNo" resultMap="BaseResultMap" parameterType="map">
     select
     <include refid="Base_Column_List" />

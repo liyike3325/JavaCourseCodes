@@ -1,6 +1,5 @@
 package com.bootcamp.bank2.service.impl;
 
-import com.bootcamp.bank.service.Bank2AccountInfoService;
 import com.bootcamp.bank.service.Bank2BalanceService;
 import com.bootcamp.bank2.entity.Balance;
 import com.bootcamp.bank2.entity.LocalConfirmLog;
@@ -31,9 +30,13 @@ public class Bank2BalanceServiceImpl implements Bank2BalanceService {
     @Autowired
     BalanceMapper balanceMapper;
 
-    @Autowired
-    AccountInfoMapper accountInfoMapper;
-
+    /**
+     * 美元兑换人民币
+     * @param accountNo
+     * @param dollar
+     * @param rmb
+     * @return
+     */
     @Override
     @Hmily(confirmMethod = "confirmMethod", cancelMethod = "cancelMethod")
     public Boolean dollarExchangeRmb(String accountNo, Double dollar, Double rmb) {
@@ -59,7 +62,7 @@ public class Bank2BalanceServiceImpl implements Bank2BalanceService {
         }
         // B扣除人民币
         balanceMapper.subtractRmb(accountNo, rmb);
-        // B冻结人民币
+        // B增加冻结人民币
         balanceMapper.addFrozenRmb(accountNo, rmb);
 
         // 插入try执行记录，用于幂等判断
@@ -71,15 +74,7 @@ public class Bank2BalanceServiceImpl implements Bank2BalanceService {
         return true;
     }
 
-    /**
-     * confirm方法
-     * confirm幂等校验
-     * 正式增加金额
-     * @param accountNo
-     * @param amount
-     */
-    @Transactional(rollbackFor = Exception.class)
-    public void confirmMethod(String accountNo, Double amount) {
+    public void confirmMethod(String accountNo, Double dollar, Double rmb) {
         // 获取全局事务id
         String transId = HmilyTransactionContextLocal.getInstance().get().getTransId();
         log.info("bank2 confirm begin 开始执行...xid:{}", transId);
@@ -87,8 +82,12 @@ public class Bank2BalanceServiceImpl implements Bank2BalanceService {
             log.info("bank2 confirm 已经执行，无需重复执行...xid:{}", transId);
             return;
         }
-        // 增加金额
-        accountInfoMapper.addAccountBalance(accountNo, amount);
+
+        // B增加美元
+        balanceMapper.addDollar(accountNo, dollar);
+        // B减少冻结人民币
+        balanceMapper.subtractFrozenRmb(accountNo, rmb);
+
         // 增加一条confirm日志，用于幂等
         LocalConfirmLog localConfirmLog = new LocalConfirmLog();
         localConfirmLog.setTxNo(transId);
@@ -97,10 +96,17 @@ public class Bank2BalanceServiceImpl implements Bank2BalanceService {
         log.info("bank2 confirm end 结束执行...xid:{}", transId);
     }
 
-    @Transactional(rollbackFor = Exception.class)
-    public void cancelMethod(String accountNo, Double amount) {
+    public void cancelMethod(String accountNo, Double dollar, Double rmb) {
         // 获取全局事务id
         String transId = HmilyTransactionContextLocal.getInstance().get().getTransId();
         log.info("bank2 cancel begin 开始执行...xid:{}", transId);
+        // B增加人民币
+        balanceMapper.addRmb(accountNo, rmb);
+        // B减少冻结人民币
+        balanceMapper.subtractFrozenRmb(accountNo, rmb);
+    }
+
+    public String hello() {
+        return "hello";
     }
 }

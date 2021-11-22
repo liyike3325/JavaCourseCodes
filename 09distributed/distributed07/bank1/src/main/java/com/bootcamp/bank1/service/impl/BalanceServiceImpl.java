@@ -1,6 +1,5 @@
 package com.bootcamp.bank1.service.impl;
 
-import com.bootcamp.bank.service.Bank2AccountInfoService;
 import com.bootcamp.bank.service.Bank2BalanceService;
 import com.bootcamp.bank1.entity.Balance;
 import com.bootcamp.bank1.entity.LocalCancelLog;
@@ -60,9 +59,10 @@ public class BalanceServiceImpl implements BalanceService {
         }
 
         // 需要扣除多少美元
-        double dollar = Math.round(rmb / (1 / 7) * 100) / 100;
+        double dollar = Math.round(rmb * (1 / 7d) * 100) / 100;
         // 获取A余额
         Balance balance = balanceMapper.getBalanceByAccountNo(accountNo);
+        double aa = balance.getDollar().doubleValue();
         if (balance.getDollar().doubleValue() < dollar) {
             throw new RuntimeException("美元不足");
         }
@@ -88,27 +88,19 @@ public class BalanceServiceImpl implements BalanceService {
         log.info("bank1 try end 结束执行...xid:{}", transId);
     }
 
-    /**
-     * confirm方法
-     * @param accountNo
-     * @param amount
-     */
-    @Transactional
-    public void commit(String accountNo, Double amount) {
+    public void commit(String accountNo, Double rmb) {
         // 获取全局事务id
         String transId = HmilyTransactionContextLocal.getInstance().get().getTransId();
-        log.info("bank1 confirm begin 开始执行...xid:{},accountNo:{},amount:{}", transId, accountNo, amount);
+        log.info("bank1 confirm begin 开始执行...xid:{},accountNo:{},amount:{}", transId, accountNo, rmb);
+        // 需要扣除多少美元
+        double dollar = Math.round(rmb * (1 / 7d) * 100) / 100;
+        // A减少冻结美元
+        balanceMapper.subtractFrozenDollar(accountNo, dollar);
+        // A增加人民币
+        balanceMapper.addRmb(accountNo, rmb);
     }
 
-    /**
-     * cancel方法
-     * cancel幂等校验
-     * cancel空回滚处理
-     * 增加可用余额
-     * @param accountNo
-     * @param amount
-     */
-    public void rollback(String accountNo, Double amount) {
+    public void rollback(String accountNo, Double rmb) {
         // 获取全局事务id
         String transId = HmilyTransactionContextLocal.getInstance().get().getTransId();
         log.info("bank1 cancel begin 开始执行...xid:{}", transId);
@@ -122,8 +114,14 @@ public class BalanceServiceImpl implements BalanceService {
             log.info("bank1 空回滚处理，try没有执行，不允许cancel执行，xid:{}", transId);
             return;
         }
-        // 增加可用余额
-        accountInfoMapper.addAccountBalance(accountNo, amount);
+
+        // 需要扣除多少美元
+        double dollar = Math.round(rmb * (1 / 7d) * 100) / 100;
+        // A增加美元
+        balanceMapper.addDollar(accountNo, dollar);
+        // A减少冻结美元
+        balanceMapper.subtractFrozenDollar(accountNo, dollar);
+
         // 插入一条cancel的执行记录
         LocalCancelLog localCancelLog = new LocalCancelLog();
         localCancelLog.setTxNo(transId);

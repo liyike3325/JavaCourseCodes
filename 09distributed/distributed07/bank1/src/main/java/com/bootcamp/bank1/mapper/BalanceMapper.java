@@ -70,5 +70,7 @@ public interface BalanceMapper {
 
     int addFrozenDollar(@Param("accountNo") String accountNo, @Param("frozenDollar") Double frozenDollar);
 
+    int addRmb(@Param("accountNo") String accountNo, @Param("rmb") Double rmb);
+
     Balance getBalanceByAccountNo(@Param("accountNo") String accountNo);
 }
