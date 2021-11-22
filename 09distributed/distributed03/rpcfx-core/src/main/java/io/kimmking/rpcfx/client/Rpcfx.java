@@ -132,32 +132,6 @@ public final class Rpcfx {
                     .url(url)
                     .post(RequestBody.create(JSONTYPE, reqJson))
                     .build();
-
-            String host = "127.0.0.1";
-            int port = 8080;
-            EventLoopGroup group = new NioEventLoopGroup();
-            try {
-                Bootstrap b = new Bootstrap();
-                b.group(group)
-                        .channel(NioSocketChannel.class)
-                        .handler(new ChannelInitializer<SocketChannel>() {
-                            @Override
-                            protected void initChannel(SocketChannel ch) throws Exception {
-                                ChannelPipeline pipeline = ch.pipeline();
-                                pipeline.addLast(new HttpClientCodec());
-                                pipeline.addLast(new HttpObjectAggregator(65536));
-                                pipeline.addLast(new HttpClientHandler());
-                            }
-                        });
-
-                ChannelFuture f = b.connect(host, port).sync();
-                f.channel().closeFuture().sync();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } finally {
-                group.shutdownGracefully();
-            }
-
             String respJson = client.newCall(request).execute().body().string();
             System.out.println("resp json: "+respJson);
             return JSON.parseObject(respJson, RpcfxResponse.class);
