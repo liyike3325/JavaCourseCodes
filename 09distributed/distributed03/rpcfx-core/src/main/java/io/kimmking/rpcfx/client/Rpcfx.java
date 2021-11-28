@@ -4,6 +4,7 @@ package io.kimmking.rpcfx.client;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.parser.ParserConfig;
 import io.kimmking.rpcfx.api.*;
+import io.kimmking.rpcfx.nettyclient.NettyClient;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
@@ -127,12 +128,17 @@ public final class Rpcfx {
 
             // 1.可以复用client
             // 2.尝试使用httpclient或者netty client
-            OkHttpClient client = new OkHttpClient();
-            final Request request = new Request.Builder()
-                    .url(url)
-                    .post(RequestBody.create(JSONTYPE, reqJson))
-                    .build();
-            String respJson = client.newCall(request).execute().body().string();
+//            OkHttpClient client = new OkHttpClient();
+//            final Request request = new Request.Builder()
+//                    .url(url)
+//                    .post(RequestBody.create(JSONTYPE, reqJson))
+//                    .build();
+//            String respJson = client.newCall(request).execute().body().string();
+
+            NettyClient client = new NettyClient("127.0.0.1", 8081, 45000);
+            client.send(RequestBody.create(JSONTYPE, reqJson));
+            String respJson = client.receive();
+
             System.out.println("resp json: "+respJson);
             return JSON.parseObject(respJson, RpcfxResponse.class);
         }
